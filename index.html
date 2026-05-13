@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>May 13 OLED Animation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Special+Elite&family=Courier+Prime:wght@400;700&family=Press+Start+2P&family=Bebas+Neue&family=Pacifico&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body,html{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* OLED FRAME */
+
+#oled-container{
+
+    width:100vw;
+    height:60vw;
+
+    max-width:520px;
+    max-height:320px;
+
+    background:#07121a;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    position:relative;
+
+    border:6px solid #111;
+
+    box-shadow:
+    0 0 40px rgba(0,255,255,0.12),
+    inset 0 0 15px rgba(255,255,255,0.05);
+
+}
+
+/* SCREEN */
+
+#cyan-layer{
+
+    position:absolute;
+    inset:0;
+
+    background:#37f5f5;
+
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+}
+
+/* BLACK CORNERS */
+
+.corner-left,
+.corner-right{
+
+    position:absolute;
+    bottom:0;
+
+    width:26%;
+    height:24%;
+
+    background:#000;
+}
+
+.corner-left{
+    left:0;
+    clip-path:polygon(0 100%,0 0,100% 100%);
+}
+
+.corner-right{
+    right:0;
+    clip-path:polygon(100% 100%,0 100%,100% 0);
+}
+
+/* STARS */
+
+.star{
+
+    position:absolute;
+
+    background:#000;
+
+    clip-path:polygon(
+        50% 0%,
+        61% 35%,
+        98% 35%,
+        68% 57%,
+        79% 91%,
+        50% 70%,
+        21% 91%,
+        32% 57%,
+        2% 35%,
+        39% 35%
+    );
+
+    animation:float 2s ease-in-out infinite;
+}
+
+.star1{
+    width:42px;
+    height:42px;
+    top:18px;
+    left:20px;
+}
+
+.star2{
+    width:22px;
+    height:22px;
+    right:45px;
+    bottom:75px;
+    animation-delay:0.4s;
+}
+
+.star3{
+    width:14px;
+    height:14px;
+    right:80px;
+    bottom:48px;
+    animation-delay:0.8s;
+}
+
+/* HEART */
+
+#heart{
+
+    width:55px;
+    height:55px;
+
+    background:#37f5f5;
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:
+    translate(-50%,-50%)
+    rotate(-45deg)
+    scale(0);
+
+    z-index:5;
+
+    box-shadow:0 0 30px #37f5f5;
+}
+
+#heart::before,
+#heart::after{
+
+    content:'';
+
+    width:55px;
+    height:55px;
+
+    background:#37f5f5;
+
+    border-radius:50%;
+
+    position:absolute;
+}
+
+#heart::before{
+    top:-27px;
+    left:0;
+}
+
+#heart::after{
+    left:27px;
+    top:0;
+}
+
+/* TEXT */
+
+#text-box{
+
+    color:#000;
+
+    text-align:center;
+
+    line-height:1;
+
+    z-index:10;
+
+    transition:all 0.08s ease;
+
+    text-shadow:
+    2px 2px rgba(0,0,0,0.15);
+
+    animation:glitch 0.15s infinite alternate;
+}
+
+/* GLOW */
+
+.glow{
+
+    position:absolute;
+    inset:0;
+
+    background:
+    radial-gradient(circle,
+    rgba(255,255,255,0.12),
+    transparent 70%);
+}
+
+/* SCANLINES */
+
+.scan{
+
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(
+        rgba(255,255,255,0.05) 50%,
+        transparent 50%
+    );
+
+    background-size:100% 4px;
+
+    pointer-events:none;
+}
+
+/* BUTTON */
+
+#start-btn{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,0.92);
+
+    color:#37f5f5;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    z-index:100;
+
+    cursor:pointer;
+
+    font-family:'Orbitron';
+
+    font-size:24px;
+
+    letter-spacing:3px;
+
+    text-shadow:0 0 10px #37f5f5;
+}
+
+/* ANIMATIONS */
+
+@keyframes float{
+
+    0%,100%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-7px);
+    }
+}
+
+@keyframes glitch{
+
+    from{
+        transform:translateX(0px);
+    }
+
+    to{
+        transform:translateX(1px);
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:480px){
+
+    #oled-container{
+        height:72vw;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="start-btn">
+    FOR YOUU BABYYY ❤️
+    (TAP TO START)
+</div>
+
+<div id="oled-container">
+
+    <div id="heart"></div>
+
+    <div id="cyan-layer">
+
+        <div class="corner-left"></div>
+        <div class="corner-right"></div>
+
+        <div class="star star1"></div>
+        <div class="star star2"></div>
+        <div class="star star3"></div>
+
+        <div id="text-box"></div>
+
+        <div class="scan"></div>
+        <div class="glow"></div>
+
+    </div>
+
+</div>
+
+<!-- PUT YOUR SONG FILE NAME HERE -->
+<audio
+id="main-audio"
+src="song.mp3"
+preload="auto">
+</audio>
+
+<script>
+
+const audio = document.getElementById('main-audio');
+
+const startBtn = document.getElementById('start-btn');
+
+const heart = document.getElementById('heart');
+
+const cyanLayer = document.getElementById('cyan-layer');
+
+const textBox = document.getElementById('text-box');
+
+/* FONT STYLES */
+
+const fontStyles = [
+
+{
+font:"65px 'VT323'",
+transform:"scale(1)"
+},
+
+{
+font:"italic bold 50px 'Courier Prime'",
+transform:"scale(1.18) rotate(-2deg)"
+},
+
+{
+font:"60px 'Pacifico'",
+transform:"scale(0.95)"
+},
+
+{
+font:"26px 'Press Start 2P'",
+transform:"scale(1.08)"
+},
+
+{
+font:"70px 'Bebas Neue'",
+transform:"scale(1.12)"
+},
+
+{
+font:"bold 42px 'Orbitron'",
+transform:"scale(1.25)"
+},
+
+{
+font:"58px 'Special Elite'",
+transform:"rotate(2deg)"
+},
+
+{
+font:"italic 68px serif",
+transform:"scale(1.08) rotate(-1deg)"
+}
+
+];
+
+startBtn.addEventListener('click',()=>{
+
+    startBtn.style.display='none';
+
+    audio.volume = 1;
+  
+    audio.currentTime = 0;
+
+    audio.play().then(()=>{
+
+    console.log("music started");
+
+     }).catch((err)=>{
+
+    console.log("audio blocked", err);
+
+});
+
+    /* HEART GROW */
+
+    heart.style.transition =
+    "transform 5s ease-in-out";
+
+    heart.style.transform =
+    "translate(-50%,-50%) rotate(-45deg) scale(1.6)";
+
+    /* HEART BLAST */
+
+    setTimeout(()=>{
+
+        heart.style.transition =
+        "transform 0.25s ease-in";
+
+        heart.style.transform =
+        "translate(-50%,-50%) rotate(-45deg) scale(35)";
+
+    },4700);
+
+    /* MAY 13 LOOP */
+
+    setTimeout(()=>{
+
+        heart.style.display='none';
+
+        cyanLayer.style.display='flex';
+
+        for(let i=0;i<8;i++){
+
+            setTimeout(()=>{
+
+                textBox.innerText="May 13";
+
+                textBox.style.font =
+                fontStyles[i].font;
+
+                textBox.style.transform =
+                fontStyles[i].transform;
+
+            },i*1000);
+
+        }
+
+    },5000);
+
+    /* LYRICS */
+
+    const lyrics = [
+
+        {t:13000,txt:"Main Gehra"},
+        {t:14000,txt:"Tamas"},
+        {t:15000,txt:"Tu Sunehra"},
+        {t:16000,txt:"Savera"}
+
+    ];
+
+    lyrics.forEach(line=>{
+
+        setTimeout(()=>{
+
+            textBox.style.font =
+            "bold 58px 'VT323'";
+
+            textBox.style.transform =
+            "scale(1)";
+
+            textBox.innerText =
+            line.txt;
+
+        },line.t);
+
+    });
+
+    /* END */
+
+    setTimeout(()=>{
+
+        cyanLayer.style.display='none';
+
+        heart.style.display='block';
+
+        heart.style.transition =
+        "transform 0.5s ease-out";
+
+        heart.style.transform =
+        "translate(-50%,-50%) rotate(-45deg) scale(0)";
+
+    },17000);
+
+});
+
+</script>
+
+</body>
+</html>
